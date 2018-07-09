@@ -1,5 +1,5 @@
 
-console.log("logging in the console");
+console.log("test logging in the console");
 
 var k;
 console.log(typeof k);
