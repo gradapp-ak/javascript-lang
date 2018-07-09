@@ -1,7 +1,7 @@
 
 console.log("test logging in the console");
 
-var k;
+var k, v;
 console.log(typeof k);
 
 console.log(typeof f1);
