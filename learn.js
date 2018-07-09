@@ -13,7 +13,7 @@ console.log("check this out="+l[index])
 console.log(typeof l);
 
 function f1(){
-	return "h"
+	return "helollo"
 }
 
 console.log(f1());
