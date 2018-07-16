@@ -26,10 +26,13 @@ console.log(`Bird funCall=${funCall}`) //undefined.
 let instance1 = new Bird('black', 'north-american', true);
 console.log(`Bird property=${instance1.home}`)
 
-let ins2 = new Bird(`grey`,'indian',true);
+let ins2 = new Bird(`grey`, 'indian', true);
 
-//added a new property on the constructor; weridly this works
-Bird.fly = function fly(up){ this.fly = up; return '0'}
+//added a new property on the constructor; weridly this works; This apparantely is the static method call
+Bird.fly = function fly(up) {
+    this.fly = up;
+    return '0'
+}
 console.log(`Bird fly: ${Bird.fly()}`)
 
 //console.log(`Bird fly: ${new Bird().fly()}`) this fails
@@ -39,7 +42,11 @@ console.log(`Bird fly: ${Bird.fly()}`)
 //console.log(`Instance ${ins2.fly()}`) this fails
 
 //extend on the prototype
-Bird.prototype.sing = function(song){this.song = song; return '55'}
+console.log(`Default prototype=${Object.keys(Bird.prototype)}`);
+Bird.prototype.sing = function (song) {
+    this.song = song;
+    return '55'
+}
 
 console.log(`Instance ${instance1.sing('uhouoo')}, Song= ${instance1.song}`)
 console.log(`Instance ${ins2.sing('hoho')}, Song= ${ins2.song}`)
@@ -51,21 +58,50 @@ console.log(`Display constructor=${ins2.constructor === Bird}`)
 console.log(`Bird's prototype = ${Bird.prototype.isPrototypeOf(ins2)}`)
 
 //proper way to prototype
-function Vehicle(){} //constructor
+function Vehicle() {
+} //constructor
 Vehicle.prototype = {
     constructor: Vehicle,
-    setColor: function(color){ this.color = color}
+    setColor: function (color) {
+        this.color = color
+    }
 }
 
-function Car() {}
+function Car() {
+}
+
 Car.prototype = Object.create(Vehicle.prototype)
 
 let color2 = new Car()
-    color2.setColor('red');
+color2.setColor('red');
 console.log(`Car color=${color2.color}`)
 
+function ConstructorAsANormalFunction() {
+    this.shouldNotBeReached = true
+    console.log(`Inside 'constructor' ShouldNotBeReached=${this.shouldNotBeReached}`)
 
+    return {
+        totallyDifferentObject : `yes`
+    }
+}
+
+var normalMethodCall = ConstructorAsANormalFunction()
+console.log(`Normal method call's member access, this.shouldNotBeReached=${normalMethodCall.shouldNotBeReached}`)
+console.log(`Normal method call's member access, this.totallyDifferentObject=${normalMethodCall.totallyDifferentObject}`)
+console.log(`Instance Of should be false = ${normalMethodCall instanceof ConstructorAsANormalFunction}`)
+
+var newedObj = new ConstructorAsANormalFunction()
+console.log(`Construction call's member access, this.shouldNotBeReached=${newedObj.shouldNotBeReached}`)
+console.log(`Construction call's member access, this.totallyDifferentObject=${newedObj.totallyDifferentObject}`)
+console.log(`Instance Of should be false = ${normalMethodCall instanceof ConstructorAsANormalFunction}`)
+
+console.log(`prototype should NOT match; check = ${normalMethodCall.prototype === ConstructorAsANormalFunction.prototype}`)
+normalMethodCall.prototype = ConstructorAsANormalFunction.prototype
+
+// this only means if the prototype links somewhere has the prototype of ConstructorAsANormalFunction
+console.log(`Instance of should be now be true = ${normalMethodCall instanceof ConstructorAsANormalFunction}`)
 console.log(`=====================`)
+
 //===========BASIC operation on an Object
 var anObject = {
     make: "Ford",
